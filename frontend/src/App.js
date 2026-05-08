@@ -6,7 +6,7 @@ import iphoneImg from "./assets/productos/iphone.png";
 import refrigeradoraImg from "./assets/productos/refrigeradora.jpg";
 import televisorImg from "./assets/productos/televisor.avif";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://sistema-ventas-yape-production.up.railway.app";
 
 function App() {
 
