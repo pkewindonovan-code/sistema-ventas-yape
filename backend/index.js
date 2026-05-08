@@ -1,104 +1,63 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./db");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const productos = [
+  {
+    id_producto: 1,
+    descripcion: "Televisor Samsung",
+    precio: 1800,
+    stock: 4
+  },
+  {
+    id_producto: 2,
+    descripcion: "Laptop Lenovo",
+    precio: 2500,
+    stock: 5
+  },
+  {
+    id_producto: 3,
+    descripcion: "iPhone 14",
+    precio: 4200,
+    stock: 3
+  },
+  {
+    id_producto: 4,
+    descripcion: "Refrigeradora LG",
+    precio: 2300,
+    stock: 2
+  }
+];
+
 app.get("/", (req, res) => {
-  res.send("Backend funcionando");
+  res.send("Backend funcionando correctamente");
 });
 
 app.get("/productos", (req, res) => {
-
-  db.query(
-    "SELECT * FROM producto",
-    (err, result) => {
-
-      if (err) {
-        return res.status(500).json(err);
-      }
-
-      res.json(result);
-
-    }
-  );
-
+  res.json(productos);
 });
 
 app.post("/ventas", (req, res) => {
+  const { total, carrito } = req.body;
 
-  const { carrito } = req.body;
+  console.log("Venta recibida:", {
+    total,
+    carrito
+  });
 
-  if (!carrito || carrito.length === 0) {
-
-    return res.status(400).json({
-      mensaje: "Carrito vacío"
-    });
-
-  }
-
-  db.query(
-    "INSERT INTO ventas (id_cliente) VALUES (NULL)",
-    (err, result) => {
-
-      if (err) {
-
-        console.log(err);
-
-        return res.status(500).json(err);
-
-      }
-
-      const idVenta = result.insertId;
-
-      carrito.forEach((item) => {
-
-        db.query(
-          `
-          INSERT INTO detalle_venta
-          (
-            cantidad,
-            id_producto,
-            id_venta
-          )
-          VALUES (?, ?, ?)
-          `,
-          [
-            item.cantidad,
-            item.id,
-            idVenta
-          ]
-        );
-
-        db.query(
-          `
-          UPDATE producto
-          SET stock = stock - ?
-          WHERE id_producto = ?
-          `,
-          [
-            item.cantidad,
-            item.id
-          ]
-        );
-
-      });
-
-      res.json({
-        mensaje: "Venta registrada",
-        id_venta: idVenta
-      });
-
-    }
-  );
-
+  res.json({
+    mensaje: "Venta registrada correctamente",
+    total,
+    carrito
+  });
 });
 
-app.listen(3001, () => {
+const PORT = process.env.PORT || 3001;
 
-  console.log("Servidor en puerto 3001");
-
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
