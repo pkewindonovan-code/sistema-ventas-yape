@@ -13,7 +13,25 @@ function App() {
     fetch(`${API}/productos`)
       .then((res) => res.json())
       .then((data) => {
-        setProductos(data);
+
+        const productosConImagen = data.map((p, index) => {
+
+          const imagenes = [
+            "https://images.unsplash.com/photo-1593784991095-a205069470b6",
+            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+            "https://images.unsplash.com/photo-1580910051074-3eb694886505",
+            "https://images.unsplash.com/photo-1581578731548-c64695cc6952"
+          ];
+
+          return {
+            ...p,
+            imagen: imagenes[index]
+          };
+
+        });
+
+        setProductos(productosConImagen);
+
       })
       .catch((err) => {
         console.log(err);
@@ -67,21 +85,60 @@ function App() {
 
       <h1>Sistema de Ventas</h1>
 
-      <div className="productos">
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
+          gap: "20px",
+          padding: "20px"
+        }}
+      >
 
         {productos.map((p) => (
 
-          <div className="card" key={p.id_producto}>
+          <div
+            key={p.id_producto}
+            style={{
+              borderRadius: "20px",
+              overflow: "hidden",
+              background: "#fff",
+              boxShadow: "0 4px 15px rgba(0,0,0,0.1)"
+            }}
+          >
 
-            <h3>{p.descripcion}</h3>
+            <img
+              src={p.imagen}
+              alt={p.descripcion}
+              style={{
+                width: "100%",
+                height: "220px",
+                objectFit: "cover"
+              }}
+            />
 
-            <p>Precio: S/ {p.precio}</p>
+            <div style={{ padding: "15px" }}>
 
-            <p>Stock: {p.stock}</p>
+              <h2>{p.descripcion}</h2>
 
-            <button onClick={() => agregarCarrito(p)}>
-              Agregar
-            </button>
+              <p>Precio: S/ {p.precio}</p>
+
+              <p>Stock: {p.stock}</p>
+
+              <button
+                onClick={() => agregarCarrito(p)}
+                style={{
+                  background: "#7c3aed",
+                  color: "white",
+                  border: "none",
+                  padding: "10px 20px",
+                  borderRadius: "10px",
+                  cursor: "pointer"
+                }}
+              >
+                Agregar
+              </button>
+
+            </div>
 
           </div>
 
@@ -91,23 +148,37 @@ function App() {
 
       <hr />
 
-      <h2>Carrito</h2>
+      <div style={{ padding: "20px" }}>
 
-      {carrito.length === 0 ? (
-        <p>No hay productos</p>
-      ) : (
-        carrito.map((item, index) => (
-          <div key={index}>
-            {item.descripcion} - S/ {item.precio}
-          </div>
-        ))
-      )}
+        <h2>Carrito</h2>
 
-      <h2>Total: S/ {total}</h2>
+        {carrito.length === 0 ? (
+          <p>No hay productos</p>
+        ) : (
+          carrito.map((item, index) => (
+            <div key={index}>
+              {item.descripcion} - S/ {item.precio}
+            </div>
+          ))
+        )}
 
-      <button onClick={registrarVenta}>
-        Registrar venta
-      </button>
+        <h2>Total: S/ {total}</h2>
+
+        <button
+          onClick={registrarVenta}
+          style={{
+            background: "green",
+            color: "white",
+            border: "none",
+            padding: "12px 20px",
+            borderRadius: "10px",
+            cursor: "pointer"
+          }}
+        >
+          Registrar venta
+        </button>
+
+      </div>
 
     </div>
   );
