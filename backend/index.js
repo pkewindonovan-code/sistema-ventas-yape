@@ -42,22 +42,22 @@ app.get("/productos", (req, res) => {
 });
 
 app.post("/ventas", (req, res) => {
+
   const { total, carrito } = req.body;
 
-  console.log("Venta recibida:", {
+  console.log("Venta registrada:", {
     total,
     carrito
   });
 
   res.json({
-    mensaje: "Venta registrada correctamente",
-    total,
-    carrito
+    mensaje: "Venta registrada correctamente"
   });
+
 });
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Servidor corriendo en puerto " + PORT);
 });
