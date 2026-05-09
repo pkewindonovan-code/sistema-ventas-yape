@@ -14,14 +14,14 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
 
-        const productosConImagen = data.map((p, index) => {
+        const imagenes = [
+          "https://i.imgur.com/8fK4h6F.jpg",
+          "https://i.imgur.com/4R1K6QK.jpg",
+          "https://i.imgur.com/xvV4YQx.png",
+          "https://i.imgur.com/7oIhA0F.jpg"
+        ];
 
-          const imagenes = [
-            "https://images.unsplash.com/photo-1593784991095-a205069470b6",
-            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
-            "https://images.unsplash.com/photo-1580910051074-3eb694886505",
-            "https://images.unsplash.com/photo-1581578731548-c64695cc6952"
-          ];
+        const productosConImagen = data.map((p, index) => {
 
           return {
             ...p,
@@ -81,16 +81,33 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div
+      style={{
+        background: "#f3f4f6",
+        minHeight: "100vh",
+        fontFamily: "Arial"
+      }}
+    >
 
-      <h1>Sistema de Ventas</h1>
+      <div
+        style={{
+          background: "#111827",
+          color: "white",
+          padding: "20px",
+          textAlign: "center",
+          fontSize: "32px",
+          fontWeight: "bold"
+        }}
+      >
+        Sistema de Ventas
+      </div>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
-          gap: "20px",
-          padding: "20px"
+          gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+          gap: "25px",
+          padding: "30px"
         }}
       >
 
@@ -102,7 +119,8 @@ function App() {
               borderRadius: "20px",
               overflow: "hidden",
               background: "#fff",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.1)"
+              boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+              transition: "0.3s"
             }}
           >
 
@@ -111,16 +129,24 @@ function App() {
               alt={p.descripcion}
               style={{
                 width: "100%",
-                height: "220px",
+                height: "250px",
                 objectFit: "cover"
               }}
             />
 
-            <div style={{ padding: "15px" }}>
+            <div style={{ padding: "20px" }}>
 
               <h2>{p.descripcion}</h2>
 
-              <p>Precio: S/ {p.precio}</p>
+              <p
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  color: "#059669"
+                }}
+              >
+                S/ {p.precio}
+              </p>
 
               <p>Stock: {p.stock}</p>
 
@@ -130,12 +156,15 @@ function App() {
                   background: "#7c3aed",
                   color: "white",
                   border: "none",
-                  padding: "10px 20px",
+                  padding: "12px 20px",
                   borderRadius: "10px",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  width: "100%",
+                  fontSize: "16px",
+                  fontWeight: "bold"
                 }}
               >
-                Agregar
+                Agregar al carrito
               </button>
 
             </div>
@@ -146,36 +175,58 @@ function App() {
 
       </div>
 
-      <hr />
+      <div
+        style={{
+          background: "white",
+          margin: "20px",
+          padding: "20px",
+          borderRadius: "20px",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.1)"
+        }}
+      >
 
-      <div style={{ padding: "20px" }}>
-
-        <h2>Carrito</h2>
+        <h2>🛒 Carrito</h2>
 
         {carrito.length === 0 ? (
           <p>No hay productos</p>
         ) : (
           carrito.map((item, index) => (
-            <div key={index}>
+            <div
+              key={index}
+              style={{
+                marginBottom: "10px",
+                borderBottom: "1px solid #ddd",
+                paddingBottom: "10px"
+              }}
+            >
               {item.descripcion} - S/ {item.precio}
             </div>
           ))
         )}
 
-        <h2>Total: S/ {total}</h2>
+        <h2
+          style={{
+            color: "#059669"
+          }}
+        >
+          Total: S/ {total}
+        </h2>
 
         <button
           onClick={registrarVenta}
           style={{
-            background: "green",
+            background: "#059669",
             color: "white",
             border: "none",
-            padding: "12px 20px",
+            padding: "15px",
             borderRadius: "10px",
-            cursor: "pointer"
+            cursor: "pointer",
+            width: "100%",
+            fontSize: "18px",
+            fontWeight: "bold"
           }}
         >
-          Registrar venta
+          Registrar Venta
         </button>
 
       </div>
