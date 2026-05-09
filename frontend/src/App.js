@@ -1,49 +1,38 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 
+import laptop from "./assets/productos/laptop.jpg";
+import refrigeradora from "./assets/productos/refrigeradora.jpg";
+import iphone from "./assets/productos/iphone.png";
+import televisor from "./assets/productos/televisor.avif";
+
 const API = "https://sistema-ventas-yape-production-f34e.up.railway.app";
 
 function App() {
-
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
 
   useEffect(() => {
-
     fetch(`${API}/productos`)
       .then((res) => res.json())
       .then((data) => {
+        const imagenes = [televisor, laptop, iphone, refrigeradora];
 
-        const imagenes = [
-          "https://i.imgur.com/8fK4h6F.jpg",
-          "https://i.imgur.com/4R1K6QK.jpg",
-          "https://i.imgur.com/xvV4YQx.png",
-          "https://i.imgur.com/7oIhA0F.jpg"
-        ];
-
-        const productosConImagen = data.map((p, index) => {
-
-          return {
-            ...p,
-            imagen: imagenes[index]
-          };
-
-        });
+        const productosConImagen = data.map((p, index) => ({
+          ...p,
+          imagen: imagenes[index],
+        }));
 
         setProductos(productosConImagen);
-
       })
       .catch((err) => {
         console.log(err);
         alert("Backend desconectado");
       });
-
   }, []);
 
   const agregarCarrito = (producto) => {
-
     setCarrito([...carrito, producto]);
-
   };
 
   const total = carrito.reduce((acc, item) => {
@@ -51,9 +40,7 @@ function App() {
   }, 0);
 
   const registrarVenta = async () => {
-
     try {
-
       const res = await fetch(`${API}/ventas`, {
         method: "POST",
         headers: {
@@ -66,29 +53,16 @@ function App() {
       });
 
       const data = await res.json();
-
       alert(data.mensaje);
-
       setCarrito([]);
-
     } catch (error) {
-
       console.log(error);
       alert("Error registrando venta");
-
     }
-
   };
 
   return (
-    <div
-      style={{
-        background: "#f3f4f6",
-        minHeight: "100vh",
-        fontFamily: "Arial"
-      }}
-    >
-
+    <div style={{ background: "#f3f4f6", minHeight: "100vh", fontFamily: "Arial" }}>
       <div
         style={{
           background: "#111827",
@@ -96,7 +70,7 @@ function App() {
           padding: "20px",
           textAlign: "center",
           fontSize: "32px",
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
       >
         Sistema de Ventas
@@ -107,12 +81,10 @@ function App() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
           gap: "25px",
-          padding: "30px"
+          padding: "30px",
         }}
       >
-
         {productos.map((p) => (
-
           <div
             key={p.id_producto}
             style={{
@@ -120,31 +92,23 @@ function App() {
               overflow: "hidden",
               background: "#fff",
               boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
-              transition: "0.3s"
             }}
           >
-
             <img
               src={p.imagen}
               alt={p.descripcion}
               style={{
                 width: "100%",
                 height: "250px",
-                objectFit: "cover"
+                objectFit: "contain",
+                background: "white",
               }}
             />
 
             <div style={{ padding: "20px" }}>
-
               <h2>{p.descripcion}</h2>
 
-              <p
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  color: "#059669"
-                }}
-              >
+              <p style={{ fontSize: "20px", fontWeight: "bold", color: "#059669" }}>
                 S/ {p.precio}
               </p>
 
@@ -161,18 +125,14 @@ function App() {
                   cursor: "pointer",
                   width: "100%",
                   fontSize: "16px",
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 Agregar al carrito
               </button>
-
             </div>
-
           </div>
-
         ))}
-
       </div>
 
       <div
@@ -181,10 +141,9 @@ function App() {
           margin: "20px",
           padding: "20px",
           borderRadius: "20px",
-          boxShadow: "0 6px 20px rgba(0,0,0,0.1)"
+          boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
         }}
       >
-
         <h2>🛒 Carrito</h2>
 
         {carrito.length === 0 ? (
@@ -196,7 +155,7 @@ function App() {
               style={{
                 marginBottom: "10px",
                 borderBottom: "1px solid #ddd",
-                paddingBottom: "10px"
+                paddingBottom: "10px",
               }}
             >
               {item.descripcion} - S/ {item.precio}
@@ -204,13 +163,7 @@ function App() {
           ))
         )}
 
-        <h2
-          style={{
-            color: "#059669"
-          }}
-        >
-          Total: S/ {total}
-        </h2>
+        <h2 style={{ color: "#059669" }}>Total: S/ {total}</h2>
 
         <button
           onClick={registrarVenta}
@@ -223,17 +176,14 @@ function App() {
             cursor: "pointer",
             width: "100%",
             fontSize: "18px",
-            fontWeight: "bold"
+            fontWeight: "bold",
           }}
         >
           Registrar Venta
         </button>
-
       </div>
-
     </div>
   );
-
 }
 
 export default App;
